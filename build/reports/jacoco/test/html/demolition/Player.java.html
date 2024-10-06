@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Demolition</a> &gt; <a href="index.source.html" class="el_package">demolition</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package demolition;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+
+import java.util.ArrayList;
+
+public class Player {
+    private int x_coord;
+    private int y_coord;
+    /** The PApplet object */
+    PApplet appObject;
+    /** Direction of the player. dafault set to Down */
+    String direction;
+    /** Map object */
+    Map myMap;
+    /** ArrayList that contains the sprites for the left movement */
+<span class="fc" id="L18">    ArrayList&lt;PImage&gt; moveLeftSprites = new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the right movement */
+<span class="fc" id="L20">    ArrayList&lt;PImage&gt; moveRightSprites= new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the vertical up direction */
+<span class="fc" id="L22">    ArrayList&lt;PImage&gt; moveUpSprites = new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the vertical down direction */
+<span class="fc" id="L24">    ArrayList&lt;PImage&gt; moveDownSprites = new ArrayList&lt;&gt;();</span>
+    /**Arraylist declared to contain the directions of a player */
+<span class="fc" id="L26">    protected String[] directions = {&quot;Up&quot;, &quot;Right&quot;, &quot;Down&quot;, &quot;Left&quot;};</span>
+
+
+  /**
+     * Constructor for a Player requires a Map Object,
+     * App Object of PApplet type, and it's initial coordinates (x and y)
+     * @param mapObject
+     * @param appObject
+     * @param x
+     * @param y
+     */
+<span class="fc" id="L37">    public Player(Map mapObject, PApplet appObject, int x, int y){</span>
+<span class="fc" id="L38">        myMap = mapObject;</span>
+<span class="fc" id="L39">        this.appObject=appObject;</span>
+<span class="fc" id="L40">        this.x_coord = x;</span>
+<span class="fc" id="L41">        this.y_coord = y;</span>
+<span class="fc" id="L42">        this.direction = &quot;Down&quot;;</span>
+
+<span class="fc" id="L44">    }</span>
+     /**
+     *Adds to the current player's x-coordinate to move it to the right
+     */
+    public void add_x_direction(){   
+<span class="fc" id="L49">        this.x_coord += 32;</span>
+<span class="fc" id="L50">    }</span>
+     /**
+     * Adds to the current player's y-coordinate to move it down
+     */
+    public void add_y_direction(){
+<span class="fc" id="L55">        this.y_coord  += 32;</span>
+<span class="fc" id="L56">    }</span>
+     /**
+     * Subtracts from the current player's y-coordinate to move it up
+     */
+    public void sub_y_direction(){
+<span class="fc" id="L61">        this.y_coord -= 32;</span>
+<span class="fc" id="L62">    }</span>
+    /**
+     * Subtracts from the current player's x-coordinate to move it to the left
+     */
+    public void sub_x_direction(){
+<span class="fc" id="L67">        this.x_coord-=32;</span>
+<span class="fc" id="L68">    }</span>
+
+// string direction
+// right x-32
+// left +32
+// up y+
+// down y-
+
+    /**Returns true if the player is blocked by walls (solid or broken) 
+     * Returns false if the player's path is free
+     * @param direction
+     * @return true or false
+     */
+    public boolean collidesWithWall(String direction){  // check if they have collided with wall
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (direction.equals(&quot;Left&quot;)){</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i)+32 == this.x_coord &amp;&amp; myMap.solidWallCoords.get(i+1) == this.y_coord){</span>
+<span class="fc" id="L85">                    return true;</span>
+                }
+            }
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.brokenWallCoords.size(); i = i+2){</span>
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">                if (myMap.brokenWallCoords.get(i)+32 == this.x_coord &amp;&amp; myMap.brokenWallCoords.get(i+1) == this.y_coord){</span>
+<span class="nc" id="L90">                    return true;</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        else if (direction.equals(&quot;Right&quot;)){</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L96" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i)-32 == this.x_coord &amp;&amp; myMap.solidWallCoords.get(i+1) == this.y_coord){</span>
+<span class="fc" id="L97">                    return true;</span>
+                }
+            }
+
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.brokenWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L102" title="All 4 branches covered.">                if (myMap.brokenWallCoords.get(i)-32 == this.x_coord &amp;&amp; myMap.brokenWallCoords.get(i+1)== this.y_coord){</span>
+<span class="fc" id="L103">                    return true;</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        else if (direction.equals(&quot;Up&quot;)){</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L109" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) == this.x_coord &amp;&amp; myMap.solidWallCoords.get(i+1)+32 == this.y_coord){</span>
+<span class="fc" id="L110">                    return true;</span>
+                }
+            }
+
+<span class="pc bfc" id="L114" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.brokenWallCoords.size(); i = i+2){</span>
+<span class="pc bpc" id="L115" title="2 of 4 branches missed.">                if (myMap.brokenWallCoords.get(i) == this.x_coord &amp;&amp; myMap.brokenWallCoords.get(i+1)+32 == this.y_coord){</span>
+<span class="fc" id="L116">                    return true;</span>
+                }
+            }
+        }
+
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        else if (direction.equals(&quot;Down&quot;)){</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L123" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) == this.x_coord &amp;&amp; myMap.solidWallCoords.get(i+1) -32 == this.y_coord){</span>
+<span class="fc" id="L124">                    return true;</span>
+                }
+            }
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.brokenWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L129" title="All 4 branches covered.">                if (myMap.brokenWallCoords.get(i) == this.x_coord &amp;&amp; myMap.brokenWallCoords.get(i+1)-32 == this.y_coord){</span>
+<span class="fc" id="L130">                    return true;</span>
+                }
+            }
+        }
+        
+<span class="fc" id="L135">        return false;</span>
+    }
+
+    
+
+    // move method for both enemies ........................................
+    /**
+     * Taking the random direction a player is moving in
+     * it moves the player in that specified direction
+     * @param randomDirection
+     */
+    public void move(String randomDirection) {
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if(!collidesWithWall(randomDirection)){</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (randomDirection.equals(&quot;Left&quot;)) {</span>
+<span class="fc" id="L149">                direction = &quot;Left&quot;;</span>
+<span class="fc" id="L150">                this.sub_x_direction();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            } else if (randomDirection.equals(&quot;Right&quot;)) {</span>
+<span class="fc" id="L152">                direction = &quot;Right&quot;;</span>
+<span class="fc" id="L153">                this.add_x_direction();</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            } else if (randomDirection.equals(&quot;Down&quot;)) {</span>
+<span class="fc" id="L155">                direction = &quot;Down&quot;;</span>
+<span class="fc" id="L156">                this.add_y_direction();</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            } else if (randomDirection.equals(&quot;Up&quot;)) {</span>
+<span class="fc" id="L158">                direction = &quot;Up&quot;;</span>
+<span class="fc" id="L159">                this.sub_y_direction();</span>
+            }
+        }
+      
+<span class="fc" id="L163">    }</span>
+    /**
+     * Draws the player in the direction they are moving
+     * A new sprite is loaded after a number of frames to produce the animation 
+     */
+    public void render() {
+     
+<span class="fc" id="L170">        int x=getX_coord();</span>
+<span class="fc" id="L171">        int y=getY_coord()-32; </span>
+<span class="pc bpc" id="L172" title="1 of 5 branches missed.">        switch (this.direction) {</span>
+            case &quot;Down&quot;:
+<span class="fc bfc" id="L174" title="All 2 branches covered.">                if (App.count == 48) {</span>
+<span class="fc" id="L175">                    App.count = 0;</span>
+                }
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">                if (App.count &gt;= 0 &amp;&amp; App.count &lt;= 12) {</span>
+<span class="fc" id="L178">                    appObject.image(moveDownSprites.get(0), x, y);</span>
+<span class="pc bpc" id="L179" title="1 of 4 branches missed.">                } else if (App.count &gt;= 12 &amp;&amp; App.count &lt;= 24) {</span>
+<span class="fc" id="L180">                    appObject.image(moveDownSprites.get(1), x, y);</span>
+<span class="pc bpc" id="L181" title="1 of 4 branches missed.">                } else if (App.count &gt;= 24 &amp;&amp; App.count &lt;= 36) {</span>
+<span class="fc" id="L182">                    appObject.image(moveDownSprites.get(2), x, y);</span>
+<span class="pc bpc" id="L183" title="2 of 4 branches missed.">                } else if (App.count &gt;= 36 &amp;&amp; App.count &lt;= 48) {</span>
+<span class="fc" id="L184">                    appObject.image(moveDownSprites.get(3), x, y);</span>
+                }
+                break;
+            case &quot;Left&quot;:
+<span class="fc bfc" id="L188" title="All 2 branches covered.">                if (App.count == 48) {</span>
+<span class="fc" id="L189">                    App.count = 0;</span>
+                }
+<span class="pc bpc" id="L191" title="1 of 4 branches missed.">                if (App.count &gt;= 0 &amp;&amp; App.count &lt;= 12) {</span>
+<span class="fc" id="L192">                    appObject.image(moveLeftSprites.get(0), x, y);</span>
+<span class="pc bpc" id="L193" title="1 of 4 branches missed.">                } else if (App.count &gt;= 12 &amp;&amp; App.count &lt;= 24) {</span>
+<span class="fc" id="L194">                    appObject.image(moveLeftSprites.get(1), x, y);</span>
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">                } else if (App.count &gt;= 24 &amp;&amp; App.count &lt;= 36) {</span>
+<span class="fc" id="L196">                    appObject.image(moveLeftSprites.get(2), x, y);</span>
+<span class="pc bpc" id="L197" title="2 of 4 branches missed.">                } else if (App.count &gt;= 36 &amp;&amp; App.count &lt;= 48) {</span>
+<span class="fc" id="L198">                    appObject.image(moveLeftSprites.get(3), x, y);</span>
+                }
+                break;
+            case &quot;Right&quot;:
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">                if (App.count == 48) {</span>
+<span class="nc" id="L203">                    App.count = 0;</span>
+                }
+<span class="pc bpc" id="L205" title="2 of 4 branches missed.">                if (App.count &gt;= 0 &amp;&amp; App.count &lt;= 12) {</span>
+<span class="nc" id="L206">                    appObject.image(moveRightSprites.get(0), x, y);</span>
+<span class="pc bpc" id="L207" title="2 of 4 branches missed.">                } else if (App.count &gt;= 12 &amp;&amp; App.count &lt;= 24) {</span>
+<span class="nc" id="L208">                    appObject.image(moveRightSprites.get(1), x, y);</span>
+<span class="pc bpc" id="L209" title="2 of 4 branches missed.">                } else if (App.count &gt;= 24 &amp;&amp; App.count &lt;= 36) {</span>
+<span class="nc" id="L210">                    appObject.image(moveRightSprites.get(2), x, y);</span>
+<span class="pc bpc" id="L211" title="2 of 4 branches missed.">                } else if (App.count &gt;= 36 &amp;&amp; App.count &lt;= 48) {</span>
+<span class="fc" id="L212">                    appObject.image(moveRightSprites.get(3), x, y);</span>
+                }
+                break;
+            case &quot;Up&quot;:
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                if (App.count == 48) {</span>
+<span class="nc" id="L217">                    App.count = 0;</span>
+                }
+<span class="pc bpc" id="L219" title="2 of 4 branches missed.">                if (App.count &gt;= 0 &amp;&amp; App.count &lt;= 12) {</span>
+<span class="nc" id="L220">                    appObject.image(moveUpSprites.get(0), x, y);</span>
+<span class="pc bpc" id="L221" title="2 of 4 branches missed.">                } else if (App.count &gt;= 12 &amp;&amp; App.count &lt;= 24) {</span>
+<span class="nc" id="L222">                    appObject.image(moveUpSprites.get(1), x, y);</span>
+<span class="pc bpc" id="L223" title="2 of 4 branches missed.">                } else if (App.count &gt;= 24 &amp;&amp; App.count &lt;= 36) {</span>
+<span class="nc" id="L224">                    appObject.image(moveUpSprites.get(2), x, y);</span>
+<span class="pc bpc" id="L225" title="2 of 4 branches missed.">                } else if (App.count &gt;= 36 &amp;&amp; App.count &lt;= 48) {</span>
+<span class="fc" id="L226">                    appObject.image(moveUpSprites.get(3), x, y);</span>
+                }
+                break;
+        }
+
+<span class="fc" id="L231">    }</span>
+    /**
+     * Returns x-coordinate of the player 
+     * @return x_coord
+     */
+    public int getX_coord(){
+<span class="fc" id="L237">        return this.x_coord;</span>
+    }
+    /**
+     * Returns the y-coordinate of the player
+     * @return y_coord
+     */
+    public int getY_coord(){
+<span class="fc" id="L244">        return this.y_coord;</span>
+    }
+    /**
+     * Sets the direction of the player
+     * @param direction
+     */
+    public void setDirection(String direction){
+<span class="fc" id="L251">        this.direction = direction;</span>
+<span class="fc" id="L252">    }</span>
+    /** Returns the direction of the player
+     * @return direction */
+    public String getDirection(){
+<span class="fc" id="L256">       return this.direction;</span>
+    }
+
+
+
+    public void setX_coord(int x){
+<span class="fc" id="L262">        this.x_coord = x;</span>
+<span class="fc" id="L263">    }</span>
+
+    public void setY_coord(int y){
+<span class="fc" id="L266">        this.y_coord = y;</span>
+<span class="fc" id="L267">    }</span>
+
+  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

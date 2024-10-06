@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bomb.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Demolition</a> &gt; <a href="index.source.html" class="el_package">demolition</a> &gt; <span class="el_source">Bomb.java</span></div><h1>Bomb.java</h1><pre class="source lang-java linenums">package demolition;
+import processing.core.PApplet;
+import processing.core.PImage;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Bomb {
+    /** Map object */
+    public Map myMap;
+    /** App object */
+    public PApplet appObject;
+    /** x-coordinate of the bomb */
+    private int bombX;
+    /** y-coordinate of the bomb */
+    private int bombY;
+    /** The relative path to bomb images */
+    public String bombPath;
+    /** The relative path for the explosion images */
+    public String explosionPath;
+    /** Bomb frame count */
+    public int bombFrameCount;
+    /** BombGuy object */
+    public BombGuy bomberman;
+    /** ArrayList containing the bombImgaes */
+<span class="fc" id="L25">    public ArrayList&lt;PImage&gt; bombImages = new ArrayList&lt;&gt;();</span>
+    /** ArrayList containing explosionImages */
+<span class="fc" id="L27">    public ArrayList&lt;PImage&gt; explosionImages = new ArrayList&lt;&gt;();</span>
+    /** Boolean to check if bombGuy is caught in bomb */
+    public boolean isBombGuyInBomb;
+    /** A counter for rendering when a bombGuy is caught in explosion*/
+<span class="fc" id="L31">    public int callBombGuyFunc = 0; </span>
+    /** App object */
+    public App app; 
+
+    /**
+     * The Bomb constructor takes the map object, app object (PApplet type), bombGuy, and an instance of the app
+     * @param mapObj
+     * @param appObj
+     * @param bomberman
+     * @param app
+     */
+<span class="fc" id="L42">    public Bomb(Map mapObj, PApplet appObj, BombGuy bomberman, App app){</span>
+<span class="fc" id="L43">        myMap = mapObj;</span>
+<span class="fc" id="L44">        appObject =  appObj;</span>
+<span class="fc" id="L45">        this.bomberman = bomberman;</span>
+<span class="fc" id="L46">        this.bombFrameCount = 0;</span>
+<span class="fc" id="L47">        this.app = app;</span>
+        // loadBombImages();
+        // loadExplosionImages();
+            
+<span class="fc" id="L51">    }</span>
+    /**
+     * Takes the x-coordinate of the bomb and sets it
+     * @param x
+     */
+    public void setBombX(int x){
+<span class="fc" id="L57">        this.bombX = x;</span>
+        
+<span class="fc" id="L59">    }</span>
+    /**
+     * Takes the x-coordinate of the bomb and sets it
+     * @param y
+     */
+    public void setBombY(int y){
+<span class="fc" id="L65">        this.bombY = y;</span>
+        
+<span class="fc" id="L67">    }</span>
+    /**
+     * Returns the x coordinate of the bomb
+     * @return this.bombX
+     */
+    public int getBombX(){
+<span class="fc" id="L73">    return  this.bombX;</span>
+        
+    }
+    /**
+     * Returns the y-coordinate of the bomb
+     * @return bombY
+     */
+    public int getBombY(){
+<span class="fc" id="L81">        return this.bombY; </span>
+        
+    }
+    /**
+     * Renders the bomb images in each frame
+     */
+    public void renderPlaceBomb(){  
+
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">        if(bombFrameCount &lt;= 0 &amp;&amp; bombFrameCount &lt;= 15){</span>
+<span class="fc" id="L90">            appObject.image(bombImages.get(0), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L92" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 16 &amp;&amp; bombFrameCount &lt;= 30){</span>
+<span class="fc" id="L93">            appObject.image(bombImages.get(1), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L95" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 31 &amp;&amp; bombFrameCount &lt;= 45){</span>
+<span class="fc" id="L96">            appObject.image(bombImages.get(2), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L98" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 46 &amp;&amp; bombFrameCount &lt;= 60){</span>
+<span class="fc" id="L99">            appObject.image(bombImages.get(3), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 61 &amp;&amp; bombFrameCount &lt;= 75){</span>
+<span class="fc" id="L102">            appObject.image(bombImages.get(4), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L104" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 76 &amp;&amp; bombFrameCount &lt;= 90){</span>
+<span class="fc" id="L105">            appObject.image(bombImages.get(5), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L107" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 91 &amp;&amp; bombFrameCount &lt;= 105){</span>
+<span class="fc" id="L108">            appObject.image(bombImages.get(6), bombX, bombY);</span>
+        }
+<span class="pc bpc" id="L110" title="1 of 4 branches missed.">        else if(bombFrameCount &lt;= 106 &amp;&amp; bombFrameCount &lt;= 120){</span>
+<span class="fc" id="L111">            appObject.image(bombImages.get(7), bombX, bombY);</span>
+        }
+<span class="fc bfc" id="L113" title="All 4 branches covered.">        else if(bombFrameCount &gt;= 121 &amp;&amp; bombFrameCount &lt;= 150){</span>
+<span class="fc" id="L114">            renderExplosion();</span>
+<span class="fc" id="L115">            bombGuyCaughtInExplosion(bombX, bombY);</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        }else if(bombFrameCount &gt; 150){</span>
+<span class="fc" id="L118">            bombX = -1;</span>
+<span class="fc" id="L119">            bombY = -1;</span>
+        }
+   
+<span class="fc" id="L122">        bombFrameCount++;</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Loads the bomb images
+     */
+    public void loadBombImages(){
+<span class="fc" id="L129">        bombPath = &quot;/src/main/resources/bomb/&quot;;</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for(int i = 1; i &lt;= 8 ; i++){</span>
+<span class="fc" id="L131">            bombImages.add(appObject.loadImage(bombPath + &quot;bomb&quot;+ i + &quot;.png&quot;));</span>
+        }
+
+<span class="fc" id="L134">    }</span>
+    /**
+     * Loads the explosion images
+     */
+    public void loadExplosionImages(){
+<span class="fc" id="L139">        explosionPath = &quot;/src/main/resources/explosion/&quot;;</span>
+<span class="fc" id="L140">        explosionImages.add(appObject.loadImage(explosionPath +&quot;centre.png&quot;));          // 0</span>
+<span class="fc" id="L141">        explosionImages.add(appObject.loadImage(explosionPath +&quot;end_bottom.png&quot;));         // 1</span>
+<span class="fc" id="L142">        explosionImages.add(appObject.loadImage(explosionPath +&quot;end_top.png&quot;));             // 2 </span>
+<span class="fc" id="L143">        explosionImages.add(appObject.loadImage(explosionPath +&quot;end_left.png&quot;));        // 3</span>
+<span class="fc" id="L144">        explosionImages.add(appObject.loadImage(explosionPath +&quot;end_right.png&quot;));       // 4</span>
+<span class="fc" id="L145">        explosionImages.add(appObject.loadImage(explosionPath +&quot;horizontal.png&quot;));      // 5</span>
+<span class="fc" id="L146">        explosionImages.add(appObject.loadImage(explosionPath +&quot;vertical.png&quot;));        // 6</span>
+
+<span class="fc" id="L148">    }</span>
+    /**
+     * Method that renders the explosion and removes any player involved 
+     */
+    public void renderExplosion(){
+       
+<span class="fc" id="L154">        appObject.image(explosionImages.get(0), bombX, bombY);  // centre</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if(!explosionHinderedByWall(&quot;Right&quot;, bombX, bombY)){</span>
+<span class="fc" id="L156">            appObject.image(explosionImages.get(5), bombX + 32 , bombY); // horizontal right</span>
+<span class="fc" id="L157">            removeRedEnemy(bombX + 32 , bombY);</span>
+<span class="fc" id="L158">            removeYellowEnemy(bombX + 32 , bombY);</span>
+           
+<span class="fc" id="L160">            removeBrokenWall(bombX + 32 , bombY);</span>
+<span class="fc" id="L161">            myMap.getEmptyWallCoords().add(bombX + 32);</span>
+<span class="fc" id="L162">            myMap.getEmptyWallCoords().add(bombY);</span>
+
+            
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if(!explosionHinderedByWall(&quot;Right End&quot;, bombX, bombY)){</span>
+<span class="fc" id="L166">                appObject.image(explosionImages.get(4), bombX + 64, bombY); // end right</span>
+<span class="fc" id="L167">                removeRedEnemy(bombX + 64, bombY);</span>
+<span class="fc" id="L168">                removeYellowEnemy(bombX + 64, bombY);</span>
+           
+<span class="fc" id="L170">                removeBrokenWall(bombX + 64 , bombY);</span>
+<span class="fc" id="L171">                myMap.getEmptyWallCoords().add(bombX + 64);</span>
+<span class="fc" id="L172">                myMap.getEmptyWallCoords().add(bombY);</span>
+                
+            }
+        }
+    
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if(!explosionHinderedByWall(&quot;Left&quot;, bombX, bombY)){</span>
+<span class="fc" id="L178">            appObject.image(explosionImages.get(5), bombX - 32, bombY); // hori.left</span>
+<span class="fc" id="L179">            removeRedEnemy(bombX - 32, bombY);</span>
+<span class="fc" id="L180">            removeYellowEnemy(bombX - 32, bombY);</span>
+        
+<span class="fc" id="L182">            removeBrokenWall(bombX - 32 , bombY);</span>
+<span class="fc" id="L183">            myMap.getEmptyWallCoords().add(bombX -32);</span>
+<span class="fc" id="L184">            myMap.getEmptyWallCoords().add(bombY);</span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">            if(!explosionHinderedByWall(&quot;Left End&quot;, bombX, bombY)){</span>
+<span class="fc" id="L186">                appObject.image(explosionImages.get(3), bombX - 64, bombY); // end left</span>
+<span class="fc" id="L187">                removeRedEnemy(bombX - 64, bombY);</span>
+<span class="fc" id="L188">                removeYellowEnemy(bombX - 64, bombY);</span>
+   
+<span class="fc" id="L190">                removeBrokenWall(bombX -64 , bombY);</span>
+<span class="fc" id="L191">                myMap.getEmptyWallCoords().add(bombX - 64);</span>
+<span class="fc" id="L192">                myMap.getEmptyWallCoords().add(bombY);</span>
+            }
+        }
+
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if(!explosionHinderedByWall(&quot;Vertical Top&quot;, bombX, bombY)){</span>
+<span class="fc" id="L197">            appObject.image(explosionImages.get(6), bombX, bombY - 32); // verti top</span>
+<span class="fc" id="L198">            removeRedEnemy(bombX, bombY - 32);</span>
+<span class="fc" id="L199">            removeYellowEnemy(bombX, bombY - 32);</span>
+       
+<span class="fc" id="L201">            removeBrokenWall(bombX , bombY- 32);</span>
+<span class="fc" id="L202">            myMap.getEmptyWallCoords().add(bombX);</span>
+<span class="fc" id="L203">            myMap.getEmptyWallCoords().add(bombY- 32);</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            if(!explosionHinderedByWall(&quot;End Top&quot;, bombX, bombY)){</span>
+<span class="fc" id="L205">                appObject.image(explosionImages.get(2), bombX, bombY - 64); // end top</span>
+<span class="fc" id="L206">                removeRedEnemy(bombX, bombY - 64);</span>
+<span class="fc" id="L207">                removeYellowEnemy(bombX, bombY - 64);</span>
+           
+<span class="fc" id="L209">                removeBrokenWall(bombX , bombY- 64);</span>
+<span class="fc" id="L210">                myMap.getEmptyWallCoords().add(bombX);</span>
+<span class="fc" id="L211">                myMap.getEmptyWallCoords().add(bombY-64);</span>
+            }
+        }
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if(!explosionHinderedByWall(&quot;Vertical Bottom&quot;, bombX, bombY)){</span>
+<span class="fc" id="L215">            appObject.image(explosionImages.get(6), bombX, bombY + 32); // verti bottom</span>
+<span class="fc" id="L216">            removeRedEnemy(bombX, bombY + 32);</span>
+<span class="fc" id="L217">            removeYellowEnemy(bombX, bombY + 32);</span>
+           
+<span class="fc" id="L219">            removeBrokenWall(bombX , bombY + 32);</span>
+<span class="fc" id="L220">            myMap.getEmptyWallCoords().add(bombX);</span>
+<span class="fc" id="L221">            myMap.getEmptyWallCoords().add(bombY+32);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            if(!explosionHinderedByWall(&quot;End Bottom&quot;, bombX, bombY)){</span>
+<span class="fc" id="L223">                appObject.image(explosionImages.get(1), bombX, bombY + 64); // end bottom</span>
+<span class="fc" id="L224">                removeRedEnemy(bombX, bombY + 64);</span>
+<span class="fc" id="L225">                removeYellowEnemy(bombX, bombY + 64);</span>
+      
+<span class="fc" id="L227">                removeBrokenWall(bombX, bombY + 64);</span>
+<span class="fc" id="L228">                myMap.getEmptyWallCoords().add(bombX);</span>
+<span class="fc" id="L229">                myMap.getEmptyWallCoords().add(bombY + 64);</span>
+            }
+        }
+         // when the enemy is in centre
+<span class="fc" id="L233">        removeRedEnemy(bombX, bombY);</span>
+<span class="fc" id="L234">        removeYellowEnemy(bombX, bombY);</span>
+   
+<span class="fc" id="L236">    }</span>
+    /**
+     * If a bomb is placed near a broken wall, the broken wall will break
+     * It takes the position where the bomb can have an effect
+     * @param x
+     * @param y
+     */
+    public void removeBrokenWall(int x, int y){
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        for(int i = 0; i &lt; myMap.brokenWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L245" title="All 4 branches covered.">        if(myMap.brokenWallCoords.get(i) == x &amp;&amp; myMap.brokenWallCoords.get(i+1) == y){</span>
+<span class="fc" id="L246">            myMap.brokenWallCoords.remove(i);</span>
+<span class="fc" id="L247">            myMap.brokenWallCoords.remove(i);</span>
+<span class="fc" id="L248">            break;</span>
+        }
+        }
+<span class="fc" id="L251">    }</span>
+    /**
+     * Checks if the area surrounding the bomb has walls
+     * If it does, the explosion will be limited
+     * @param direction
+     * @param x
+     * @param y
+     * @return true or false
+     */
+    public boolean explosionHinderedByWall(String direction, int x, int y){
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        if(direction.equals(&quot;Right&quot;)){</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L263" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) - 32 == getBombX() &amp;&amp; myMap.solidWallCoords.get(i+1) == getBombY()){</span>
+<span class="fc" id="L264">                return true;</span>
+                }
+            }
+        }
+        
+<span class="fc bfc" id="L269" title="All 2 branches covered.">        if(direction.equals(&quot;Left&quot;)){</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="pc bpc" id="L271" title="1 of 4 branches missed.">                if (myMap.solidWallCoords.get(i) + 32  == getBombX() &amp;&amp; myMap.solidWallCoords.get(i+1) == getBombY()){</span>
+<span class="fc" id="L272">                    return true;</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if(direction.equals(&quot;Right End&quot;)){</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) - 64 == getBombX() &amp;&amp; myMap.solidWallCoords.get(i+1) == getBombY()){</span>
+<span class="fc" id="L280">                    return true;</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if(direction.equals(&quot;Left End&quot;)){</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="pc bpc" id="L287" title="1 of 4 branches missed.">                if (myMap.solidWallCoords.get(i) + 64 == getBombX()&amp;&amp; myMap.solidWallCoords.get(i+1) == getBombY()){</span>
+<span class="fc" id="L288">                    return true;</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        if(direction.equals(&quot;Vertical Top&quot;)){</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L295" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) == getBombX()&amp;&amp; myMap.solidWallCoords.get(i+1) + 32 == getBombY()){</span>
+<span class="fc" id="L296">                    return true;</span>
+                }
+            }
+        }
+
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        if(direction.equals(&quot;Vertical Bottom&quot;)){</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L303" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) == getBombX()&amp;&amp; myMap.solidWallCoords.get(i+1) - 32 == getBombY()){</span>
+<span class="fc" id="L304">                    return true;</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        if(direction.equals(&quot;End Top&quot;)){</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="fc bfc" id="L310" title="All 4 branches covered.">                if (myMap.solidWallCoords.get(i) == getBombX() &amp;&amp; myMap.solidWallCoords.get(i+1) + 64 == getBombY()){</span>
+<span class="fc" id="L311">                    return true;</span>
+                }
+            }
+        }
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if(direction.equals(&quot;End Bottom&quot;)){</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">            for(int i = 0 ; i &lt; myMap.solidWallCoords.size(); i = i+2){</span>
+<span class="pc bpc" id="L317" title="1 of 4 branches missed.">                if (myMap.solidWallCoords.get(i) == getBombX()&amp;&amp; myMap.solidWallCoords.get(i+1) - 64 == getBombY()){</span>
+<span class="fc" id="L318">                    return true;</span>
+                }
+            }
+        }
+<span class="fc" id="L322">            return false;</span>
+    }
+    /**
+     * Takes the bomb's position and if it matches with the Red Enemy's position, enemy is removed
+     * @param x
+     * @param y
+     */
+    public void removeRedEnemy(int x, int y){
+<span class="fc" id="L330">        Iterator&lt;RedEnemy&gt; itrRed = myMap.getRedEnemyList().iterator();</span>
+<span class="fc bfc" id="L331" title="All 2 branches covered.">        while (itrRed.hasNext()) {</span>
+<span class="fc" id="L332">            RedEnemy enemyRed = itrRed.next();</span>
+<span class="pc bpc" id="L333" title="3 of 4 branches missed.">            if (enemyRed.getX_coord() == x &amp;&amp; enemyRed.getY_coord() == y) {</span>
+<span class="nc" id="L334">            itrRed.remove();</span>
+            }
+<span class="fc" id="L336">        }</span>
+<span class="fc" id="L337">    }</span>
+    /**
+     * Takes the Bomb position and if it matches with Yellow Enemy's position, enemy is removed
+     * @param x
+     * @param y
+     */
+    public void removeYellowEnemy(int x, int y){
+<span class="fc" id="L344">        Iterator&lt;YellowEnemy&gt; itrYellow = myMap.getYellowEnemyList().iterator();</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">        while (itrYellow.hasNext()) {</span>
+<span class="fc" id="L346">            YellowEnemy enemyYellow = itrYellow.next();</span>
+<span class="pc bpc" id="L347" title="3 of 4 branches missed.">            if (enemyYellow.getX_coord() == x &amp;&amp; enemyYellow.getY_coord() == y) {</span>
+<span class="nc" id="L348">            itrYellow.remove();</span>
+            }
+<span class="fc" id="L350">        }</span>
+<span class="fc" id="L351">    }</span>
+    /**
+     * Takes the position of the bomb and returns if the coordinate matches with BombGuy's position
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean bombGuyCaughtInExplosion(int x, int y){
+<span class="fc bfc" id="L359" title="All 4 branches covered.">        if (bomberman.getX_coord() == x &amp;&amp; bomberman.getY_coord() == y){</span>
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="fc" id="L361">            app.levelReset();</span>
+<span class="fc" id="L362">            callBombGuyFunc++;</span>
+<span class="fc" id="L363">            return true;</span>
+        }
+         
+<span class="fc bfc" id="L366" title="All 4 branches covered.">        else if (x + 32 == bomberman.getX_coord() &amp;&amp; y == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="nc" id="L368">            app.levelReset();</span>
+<span class="fc" id="L369">            callBombGuyFunc++;</span>
+<span class="fc" id="L370">            return true;</span>
+        }
+<span class="pc bpc" id="L372" title="1 of 4 branches missed.">        else if (x - 32 == bomberman.getX_coord() &amp;&amp; y == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="fc" id="L374">            app.levelReset();</span>
+<span class="fc" id="L375">            callBombGuyFunc++;</span>
+<span class="fc" id="L376">            return true;</span>
+        }
+<span class="pc bpc" id="L378" title="1 of 4 branches missed.">        else if (x + 64 == bomberman.getX_coord() &amp;&amp; y == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="nc" id="L380">            app.levelReset();</span>
+<span class="fc" id="L381">            callBombGuyFunc++;</span>
+<span class="fc" id="L382">            return true;</span>
+        }
+<span class="pc bpc" id="L384" title="1 of 4 branches missed.">        else if (x - 64 == bomberman.getX_coord() &amp;&amp; y == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="fc" id="L386">            app.levelReset();</span>
+<span class="fc" id="L387">            callBombGuyFunc++;</span>
+<span class="fc" id="L388">            return true;</span>
+        }
+<span class="fc bfc" id="L390" title="All 4 branches covered.">        else if (x == bomberman.getX_coord() &amp;&amp; y + 32 == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="nc" id="L392">            app.levelReset();</span>
+<span class="fc" id="L393">            callBombGuyFunc++;</span>
+<span class="fc" id="L394">            return true;</span>
+        }
+<span class="fc bfc" id="L396" title="All 4 branches covered.">        else if (x == bomberman.getX_coord() &amp;&amp; y - 32 == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="fc" id="L398">            app.levelReset();</span>
+<span class="fc" id="L399">            callBombGuyFunc++;</span>
+<span class="fc" id="L400">            return true;</span>
+        }
+<span class="fc bfc" id="L402" title="All 4 branches covered.">        else if (x == bomberman.getX_coord() &amp;&amp; y+ 64 == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="nc" id="L404">            app.levelReset();</span>
+<span class="fc" id="L405">            callBombGuyFunc++;</span>
+<span class="fc" id="L406">            return true;</span>
+        }
+<span class="pc bpc" id="L408" title="1 of 4 branches missed.">        else if (x == bomberman.getX_coord() &amp;&amp; y - 64 == bomberman.getY_coord()){</span>
+<span class="pc bpc" id="L409" title="1 of 2 branches missed.">            if (callBombGuyFunc == 0)</span>
+<span class="fc" id="L410">            app.levelReset();</span>
+<span class="fc" id="L411">            callBombGuyFunc++;</span>
+<span class="fc" id="L412">            return true;</span>
+        }
+        
+<span class="fc" id="L415">        return false;</span>
+        
+    }
+
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

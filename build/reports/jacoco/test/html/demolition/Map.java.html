@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Map.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Demolition</a> &gt; <a href="index.source.html" class="el_package">demolition</a> &gt; <span class="el_source">Map.java</span></div><h1>Map.java</h1><pre class="source lang-java linenums">package demolition;
+
+import processing.data.JSONArray;
+import processing.data.JSONObject;
+import processing.core.PApplet;
+import processing.core.PImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+
+public class Map{
+    /**Solid wall image */
+   private PImage solidWall;
+    /**Broken wall image */
+   private PImage brokenWall;
+    /**Empty wall image */
+   private PImage emptyWall;
+    /**Goal wall image */
+   private PImage goalWall;
+    /**Player icon image */
+   private PImage iconPlayer;
+    /**Time icon image */
+   private PImage iconTime;
+    /**PApplet app object */
+    public PApplet appObject;
+    // newly added
+     /** Config File */
+<span class="fc" id="L32">    public static String configFile= &quot;config.json&quot;;</span>
+    /** Timer */
+    public int timer;
+    /**Bomb Guy x-coordinate */
+    private int bombGuyPositionX;
+     /**Bomb Guy y-coordinate*/
+    private int bombGuyPositionY;
+     /** Red Enemy x-coordinate*/
+    private int redEnemyPositionX;
+     /**Red enemy y-coordinate */
+    private int redEnemyPositionY;
+     /**Yellow enemy x-coordinate */
+    private int yellowEnemyPositionX;
+     /** Yello enemy y-coordinate*/
+    private int yellowEnemyPositionY;
+     /**Level Passed*/
+    public boolean levelPassed;
+    /** Current level */
+<span class="fc" id="L50">    public static int currentLevel = 0;</span>
+     /** ArrayList of map levels */
+<span class="fc" id="L52">    public ArrayList&lt;String&gt; mapLevels = new ArrayList&lt;&gt;();</span>
+     /**ArrayList of map level times */
+<span class="fc" id="L54">    public ArrayList&lt;Integer&gt; mapLevelTime = new ArrayList&lt;&gt;();</span>
+     /**ArrayList of Solid Wall coordinates */
+<span class="fc" id="L56">    public ArrayList&lt;Integer&gt; solidWallCoords = new ArrayList&lt;&gt;();</span>
+     /**ArrayList of Broken Wall coordinates*/
+<span class="fc" id="L58">    public ArrayList&lt;Integer&gt; brokenWallCoords = new ArrayList&lt;&gt;();</span>
+    /**ArrayList of Empty Wall coordinates */
+<span class="fc" id="L60">    private ArrayList&lt;Integer&gt; emptyWallCoords = new ArrayList&lt;&gt;(); </span>
+     /** ArrayList of Goal Wall coordinates*/
+<span class="fc" id="L62">    public ArrayList&lt;Integer&gt; goalWallCoord = new ArrayList&lt;&gt;();  </span>
+    /** ArrayList of RedEnemy objects */
+<span class="fc" id="L64">    private ArrayList&lt;RedEnemy&gt; redEnemyList = new ArrayList&lt;&gt;();</span>
+    /** ArrayList of YellowEnemy objects */
+<span class="fc" id="L66">    private ArrayList&lt;YellowEnemy&gt; yellowEnemyList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L68">    private int playerCount = 0;</span>
+
+    /**
+     * Constructor of the Map takes the PApplet object
+     * @param appObject
+     */
+<span class="fc" id="L74">    public Map(PApplet appObject){</span>
+<span class="fc" id="L75">        this.appObject = appObject;</span>
+<span class="fc" id="L76">        this.levelPassed = false;</span>
+<span class="fc" id="L77">        readConfigFile();    </span>
+       
+        
+<span class="fc" id="L80">        playerCoordinate(mapLevels.get(currentLevel));</span>
+<span class="fc" id="L81">        timer = mapLevelTime.get(currentLevel);</span>
+        
+<span class="fc" id="L83">    }</span>
+    /**
+     * Takes the Bomb Guy coordinate and matches with the Goal Tile to see if
+     * Bomb Guy has passed it
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isLevelPassed(int x, int y){
+<span class="pc bpc" id="L92" title="1 of 4 branches missed.">        if (goalWallCoord.get(0) == x &amp;&amp; goalWallCoord.get(1) == y){</span>
+<span class="fc" id="L93">            levelPassed = true;</span>
+<span class="fc" id="L94">            return true;</span>
+        }
+<span class="fc" id="L96">        return false;</span>
+    }
+    /**
+     * Checks if the BombGuy has completed all the levels on time
+     * @return true or false
+     */
+    public boolean isGameWon(){
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (mapLevels.size() == currentLevel){</span>
+<span class="fc" id="L104">            return true;</span>
+        }
+<span class="fc" id="L106">        return false;</span>
+    }
+
+
+
+    /**
+     * Takes the level file as it's parameter and reads all the coordinates of the Walls and keeps them
+     * stored in ArrayList
+     * @param level
+     */
+    public void loadMapDrawing(String level){
+<span class="fc" id="L117">    this.solidWall = appObject.loadImage( &quot;/src/main/resources/wall/solid.png&quot;);</span>
+<span class="fc" id="L118">    this.brokenWall =appObject.loadImage(&quot;/src/main/resources/broken/broken.png&quot;);</span>
+<span class="fc" id="L119">    this.emptyWall = appObject.loadImage(&quot;/src/main/resources/empty/empty.png&quot;);</span>
+<span class="fc" id="L120">    this.goalWall= appObject.loadImage(&quot;/src/main/resources/goal/goal.png&quot;);</span>
+<span class="fc" id="L121">    this.iconPlayer= appObject.loadImage(&quot;/src/main/resources/icons/player.png&quot;);</span>
+<span class="fc" id="L122">    this.iconTime= appObject.loadImage(&quot;/src/main/resources/icons/clock.png&quot;);</span>
+<span class="fc" id="L123">     File f= new File(level);     //Creation of File Descriptor for input file</span>
+        try{
+<span class="fc" id="L125">        FileReader fr=new FileReader(f);   //Creation of File Reader object</span>
+<span class="fc" id="L126">            BufferedReader brFile = new BufferedReader(fr);  //Creation of BufferedReader object</span>
+<span class="fc" id="L127">            int c = 0; </span>
+<span class="fc" id="L128">            int x = 0;</span>
+<span class="fc" id="L129">            int y = 64;            </span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">            while((c = brFile.read()) != -1){         //Read char by Char</span>
+<span class="fc" id="L131">                    char character = (char) c;          //converting integer to char</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                    if (character == 'W'){</span>
+<span class="fc" id="L133">                        appObject.image(solidWall, x, y); </span>
+<span class="fc" id="L134">                        solidWallCoords.add(x);         </span>
+<span class="fc" id="L135">                        solidWallCoords.add(y); </span>
+                    }
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                    else if (character == 'B'){</span>
+<span class="fc" id="L138">                        appObject.image(brokenWall, x,y);</span>
+<span class="fc" id="L139">                        brokenWallCoords.add(x);        </span>
+<span class="fc" id="L140">                        brokenWallCoords.add(y);   </span>
+                    }
+<span class="fc bfc" id="L142" title="All 8 branches covered.">                    else if (character == ' '|| character == 'P' || character == 'R' || character == 'Y'){</span>
+                        // appObject.image(emptyWall, x,y); 
+<span class="fc" id="L144">                        emptyWallCoords.add(x);</span>
+<span class="fc" id="L145">                        emptyWallCoords.add(y);  </span>
+                    }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">                    else if (character == 'G'){</span>
+                        // appObject.image(goalWall, x,y); 
+<span class="fc" id="L149">                        goalWallCoord.add(x);</span>
+<span class="fc" id="L150">                        goalWallCoord.add(y);          </span>
+                    }
+<span class="fc" id="L152">                    x += 32;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                    if (x == 480){</span>
+<span class="fc" id="L154">                        y += 32;</span>
+<span class="fc" id="L155">                        x = -64;</span>
+                    }  
+<span class="fc" id="L157">            }</span>
+            
+<span class="nc" id="L159">        }catch (Exception e){</span>
+<span class="nc" id="L160">           e.printStackTrace();</span>
+<span class="fc" id="L161">        }</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Draws the images of the walls on the map
+     */
+
+    public void renderWalls(){
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        for (int i = 0; i &lt; solidWallCoords.size(); i = i +2){</span>
+<span class="fc" id="L170">            appObject.image(solidWall, solidWallCoords.get(i),solidWallCoords.get(i+1));</span>
+        }
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (int i = 0; i &lt; brokenWallCoords.size(); i = i +2){</span>
+<span class="fc" id="L173">            appObject.image(brokenWall, brokenWallCoords.get(i),brokenWallCoords.get(i+1));</span>
+        } 
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        for (int i = 0; i &lt; emptyWallCoords.size(); i = i +2){</span>
+<span class="fc" id="L176">            appObject.image(emptyWall, emptyWallCoords.get(i),emptyWallCoords.get(i+1));</span>
+        } 
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (int i = 0; i &lt; goalWallCoord.size(); i = i +2){</span>
+<span class="fc" id="L179">            appObject.image(goalWall, goalWallCoord.get(i),goalWallCoord.get(i+1));</span>
+        } 
+<span class="fc" id="L181">    }</span>
+
+    /**
+     * Takes the current level file and keeps the positions
+     * of the players saved (Bomb GUy/ Red Enemy/ Yellow Enemy) 
+     * @param level
+     */
+    public void playerCoordinate(String level){
+        
+<span class="fc" id="L190">        File f= new File(level);     //Creation of File Descriptor for input file</span>
+        try{
+<span class="fc" id="L192">        FileReader fr=new FileReader(f);   //Creation of File Reader object</span>
+        
+<span class="fc" id="L194">            BufferedReader brFile = new BufferedReader(fr);  //Creation of BufferedReader object</span>
+<span class="fc" id="L195">            int c = 0; </span>
+<span class="fc" id="L196">            int x = 0;</span>
+<span class="fc" id="L197">            int y = 64;</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">            while((c = brFile.read()) != -1){         //Read char by Char</span>
+            
+<span class="fc" id="L200">                    char character = (char) c;          //converting integer to char</span>
+<span class="fc bfc" id="L201" title="All 4 branches covered.">                    if (character == 'P' &amp;&amp; playerCount ==0){</span>
+<span class="fc" id="L202">                        this.bombGuyPositionX = x;</span>
+<span class="fc" id="L203">                        this.bombGuyPositionY  = y;</span>
+<span class="fc" id="L204">                        playerCount++;</span>
+
+                    }
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                    if (character == 'R'){</span>
+<span class="fc" id="L208">                        redEnemyPositionX = x;</span>
+<span class="fc" id="L209">                        redEnemyPositionY  = y;</span>
+<span class="fc" id="L210">                        redEnemyList.add(new RedEnemy(this, appObject, redEnemyPositionX, redEnemyPositionY));</span>
+<span class="fc" id="L211">                        redEnemyList.get(redEnemyList.size()-1).loadRedEnemyImages();</span>
+                        
+                    }
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                    if (character == 'Y'){</span>
+<span class="fc" id="L215">                        yellowEnemyPositionX = x;</span>
+<span class="fc" id="L216">                        yellowEnemyPositionY = y;</span>
+<span class="fc" id="L217">                        yellowEnemyList.add(new YellowEnemy(this, appObject, yellowEnemyPositionX, yellowEnemyPositionY));</span>
+<span class="fc" id="L218">                        yellowEnemyList.get(yellowEnemyList.size()-1).loadYellowEnemyImages();</span>
+                         
+                    }
+<span class="fc" id="L221">                    x += 32;</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">                    if (x == 480){</span>
+<span class="fc" id="L223">                        y += 32;</span>
+<span class="fc" id="L224">                        x = -64;</span>
+                    }
+<span class="fc" id="L226">            }</span>
+<span class="fc" id="L227">        }catch (Exception e){</span>
+          
+<span class="fc" id="L229">        }</span>
+<span class="fc" id="L230">    }</span>
+
+    /**
+     * Reads the config file and extracts information from it
+     * @return Arraylist&lt;String&gt; configDetails
+     */
+    public ArrayList&lt;String&gt; readConfigFile() {
+<span class="fc" id="L237">        ArrayList&lt;String&gt; configDetails = new ArrayList&lt;String&gt;();   // call from App.java: taking the details</span>
+<span class="fc" id="L238">        JSONObject mapDetails = null;</span>
+        String lives;
+
+<span class="fc" id="L241">        File jsonFile = new File(configFile);</span>
+        try {
+<span class="fc" id="L243">            Scanner scan = new Scanner(jsonFile);</span>
+<span class="fc" id="L244">            StringBuffer sb = new StringBuffer();</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">            while (scan.hasNext()) {</span>
+<span class="fc" id="L246">                sb.append(&quot;&quot; + scan.nextLine());</span>
+            }
+<span class="fc" id="L248">            scan.close();</span>
+<span class="fc" id="L249">            mapDetails = JSONObject.parse(sb.toString());</span>
+<span class="fc" id="L250">            lives = mapDetails.get(&quot;lives&quot;).toString();</span>
+<span class="fc" id="L251">            configDetails.add(lives);</span>
+<span class="fc" id="L252">            JSONArray levelDetails = mapDetails.getJSONArray(&quot;levels&quot;);</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            for(int i = 0; i &lt; levelDetails.size(); i ++) {</span>
+<span class="fc" id="L254">                String path = levelDetails.getJSONObject(i).getString(&quot;path&quot;);</span>
+<span class="fc" id="L255">                mapLevels.add(path);</span>
+<span class="fc" id="L256">                int time = levelDetails.getJSONObject(i).getInt(&quot;time&quot;);</span>
+<span class="fc" id="L257">                mapLevelTime.add(time);</span>
+<span class="fc" id="L258">                configDetails.add(path);</span>
+<span class="fc" id="L259">                configDetails.add(Integer.toString(time));</span>
+            }
+
+<span class="nc" id="L262">        }catch (Exception e){</span>
+
+<span class="fc" id="L264">        }</span>
+<span class="fc" id="L265">       return configDetails;</span>
+      
+    }
+
+    /**
+     * Takes the First and Last line of the Map and checks if is completely bounded by Solid Walls
+     * @param line
+     * @return true or false
+     */
+    public boolean isFirstLastValid(String line) {
+<span class="fc" id="L275">        String FIRSTLASTLINE = &quot;WWWWWWWWWWWWWWW&quot;;</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (line.equals(FIRSTLASTLINE)) {</span>
+<span class="fc" id="L277">            return true;</span>
+        } else {
+<span class="fc" id="L279">            return false;</span>
+        }
+    }
+
+    /**
+     * Takes the lines in between of the map and checks if it starts and ends with a Solid Wall
+     * @param line
+     * @return true or false
+     */
+    public boolean isMidValid(String line) {
+<span class="pc bpc" id="L289" title="3 of 6 branches missed.">        if (line.startsWith(&quot;W&quot;) &amp;&amp; line.endsWith(&quot;W&quot;) &amp;&amp; line.length() == 15){</span>
+<span class="fc" id="L290">            return true;</span>
+        }
+        else {
+<span class="nc" id="L293">            return false;</span>
+        }
+    }
+
+    /**
+     * Reads the map and checks if the map is valid
+     * i.e: Map is bounded by Solid Walls
+     * @return true or false
+     */
+
+    public boolean isMapValid(){
+<span class="fc" id="L304">        boolean isFirstLineValid = false;</span>
+<span class="fc" id="L305">        boolean isMidLineValid = true;</span>
+<span class="fc" id="L306">        boolean isFirstLineFound = false;</span>
+<span class="fc" id="L307">        boolean isLastLineValid = false;</span>
+<span class="fc" id="L308">        boolean isPlayerFound=false;</span>
+<span class="fc" id="L309">        boolean isGoalFound=false;</span>
+        String line;
+<span class="fc" id="L311">        int Wcount = 0;</span>
+<span class="fc" id="L312">        File myFile = new File(mapLevels.get(Map.currentLevel));</span>
+        try {
+<span class="fc" id="L314">            Scanner levelFile = new Scanner(myFile);</span>
+
+<span class="fc bfc" id="L316" title="All 2 branches covered.">            while (levelFile.hasNextLine()) {</span>
+<span class="fc" id="L317">                line = levelFile.nextLine();</span>
+
+                //first line validity starts ---------
+
+<span class="fc bfc" id="L321" title="All 4 branches covered.">                if (line.startsWith(&quot;W&quot;) &amp;&amp; !isFirstLineFound) {</span>
+<span class="fc" id="L322">                    isFirstLineFound = true;</span>
+<span class="fc" id="L323">                    Wcount++;</span>
+
+<span class="fc" id="L325">                    isFirstLineValid = isFirstLastValid(line);</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">                    if (!isFirstLineValid){</span>
+<span class="nc" id="L327">                        return false;</span>
+                    }
+                }
+                //first line validity ends here --------
+
+                // Mid and End line validity starts ------------
+<span class="fc bfc" id="L333" title="All 2 branches covered.">                else if(Wcount == 1){</span>
+
+<span class="fc bfc" id="L335" title="All 2 branches covered.">                    if (!isPlayerFound){</span>
+<span class="fc" id="L336">                        isPlayerFound = line.contains(&quot;P&quot;);</span>
+                    }
+<span class="fc bfc" id="L338" title="All 2 branches covered.">                    if (!isGoalFound){</span>
+<span class="fc" id="L339">                        isGoalFound = line.contains(&quot;G&quot;);</span>
+                    }
+
+<span class="fc" id="L342">                    isMidLineValid = isMidValid(line);</span>
+
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">                    if(!isMidLineValid){</span>
+<span class="nc" id="L345">                        return false;</span>
+                    }
+<span class="fc" id="L347">                    isLastLineValid = isFirstLastValid(line);</span>
+
+<span class="fc bfc" id="L349" title="All 2 branches covered.">                    if(isLastLineValid){</span>
+<span class="fc" id="L350">                        Wcount++;</span>
+                    }
+                }
+                //Mid and End line validity ends -----------
+            
+            } 
+<span class="nc" id="L356">        } catch (Exception e) {</span>
+<span class="nc" id="L357">            e.printStackTrace();</span>
+<span class="fc" id="L358">        }</span>
+<span class="pc bpc" id="L359" title="2 of 4 branches missed.">        if (isPlayerFound &amp;&amp; isGoalFound){</span>
+<span class="fc" id="L360">            return true;</span>
+<span class="nc" id="L361">        }else return false;</span>
+    }
+    /**
+     * Returns if the time has finished
+     * @return true or false
+     */
+    public boolean isTimeFinished (){
+<span class="fc bfc" id="L368" title="All 2 branches covered.">        return this.timer &lt;= 0;</span>
+    }
+
+    /**
+     * Returns the map current level
+     * @return Map.currentLevel
+     */
+    public int getCurrentLevel(){
+<span class="fc" id="L376">        return Map.currentLevel;</span>
+    }
+    /**
+     * Returns x-coordinate of Bomb Guy
+     * @return bombGuyPositionX
+     */
+    public int getBombGuyPositionX(){
+<span class="fc" id="L383">        return bombGuyPositionX;</span>
+    }
+
+    /**
+     * Returns y-coordinate of BombGuy
+     * @return bombGuyPositionY
+     */
+    public int getBombGuyPositionY(){
+<span class="fc" id="L391">        return bombGuyPositionY;</span>
+    }
+    /**
+     * Returns x-coordinate of Red Enemy
+     * @return yellowEnemyPositionX
+     */
+    public int getRedEnemyPositionX(){
+<span class="fc" id="L398">        return redEnemyPositionX;</span>
+    }
+    /**
+     * Returns y-coordinate of Red Enemy
+     * @return redEnemyPositionY
+     */
+    public int getRedEnemyPositionY(){
+<span class="fc" id="L405">        return redEnemyPositionY;</span>
+    }
+    /**
+     * Returns x-coordinate of Yellow Enemy
+     * @return yellowEnemyPositionX
+     */
+    public int getYellowEnemyPositionX(){
+<span class="fc" id="L412">        return yellowEnemyPositionX;</span>
+    }
+    /**
+     * Returns y-coordinate of Yellow Enemy
+     * @return yellowEnemyPositionY
+     */
+    public int getYellowEnemyPositionY(){
+<span class="fc" id="L419">        return yellowEnemyPositionY;</span>
+    }
+    /**
+     * Retuns SOlid Wall image
+     * @return solidWall
+     */
+    public PImage getSolidWall(){
+<span class="fc" id="L426">        return solidWall;</span>
+    }
+    /**
+     * Retuns Broken Wall image
+     * @return brokenWall
+     */
+    public PImage getBrokenWall(){
+<span class="fc" id="L433">        return brokenWall;</span>
+    }
+    /**
+     * Retuns Empty Wall image
+     * @return emptyWall
+     */
+    public PImage getEmptyWall(){
+<span class="fc" id="L440">        return emptyWall;</span>
+    }
+    /**
+     * Returns goal wall image
+     * @return goalWall
+     */
+    public PImage getGoalWall(){
+<span class="fc" id="L447">        return goalWall;</span>
+    }
+    /**
+     * Returns the player icon image
+     * @return iconPlayer
+     */
+    public PImage getIconPlayer(){
+<span class="fc" id="L454">        return iconPlayer;</span>
+    }
+    /**
+     * Returns the time icon image
+     * @return iconTime
+     */
+    public PImage getIconTime(){
+<span class="fc" id="L461">        return iconTime;</span>
+    }
+    /**
+     * Returns the ArrayList of redEnemy objects
+     * @return redEnemyList
+     */
+    public ArrayList&lt;RedEnemy&gt; getRedEnemyList(){
+<span class="fc" id="L468">        return redEnemyList;</span>
+    }
+    /**
+     * Returns the ArrayList of YellowEnemy objects
+     * @return yellowEnemyList
+     */
+    public ArrayList&lt;YellowEnemy&gt; getYellowEnemyList(){
+<span class="fc" id="L475">        return yellowEnemyList;</span>
+    }
+    /**
+     * Returns the ArrayList containing the empty tile coordinates
+     * @return emmptyWallCoords
+     */
+    public ArrayList&lt;Integer&gt; getEmptyWallCoords(){
+<span class="fc" id="L482">        return emptyWallCoords;</span>
+    }
+
+//new addition
+/**
+ * Takes the file name as the parameter and sets
+ * name of the file we will be loading our game from
+ * @param fileName
+ */
+    public void setConfigFile(String fileName){
+<span class="fc" id="L492">        configFile = fileName;</span>
+<span class="fc" id="L493">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

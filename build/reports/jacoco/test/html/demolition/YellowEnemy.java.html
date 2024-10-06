@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>YellowEnemy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Demolition</a> &gt; <a href="index.source.html" class="el_package">demolition</a> &gt; <span class="el_source">YellowEnemy.java</span></div><h1>YellowEnemy.java</h1><pre class="source lang-java linenums">package demolition;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+import java.util.ArrayList;
+
+public class YellowEnemy extends Enemy{
+    /** The PApplet object */
+    PApplet appObject;
+    /** ArrayList that contains the sprites for the left movement */
+<span class="fc" id="L11">    ArrayList&lt;PImage&gt; moveLeftSprites = new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the right movement */
+<span class="fc" id="L13">    ArrayList&lt;PImage&gt; moveRightSprites = new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the vertical up direction */
+<span class="fc" id="L15">    ArrayList&lt;PImage&gt; moveUpSprites = new ArrayList&lt;&gt;();</span>
+    /** ArrayList that contains the sprites for the vertical down direction */
+<span class="fc" id="L17">    ArrayList&lt;PImage&gt; moveDownSprites = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructor for a Yellow Enemy requires a Map Object,
+     * App Object of PApplet type, and it's initial coordinates (x and y)
+     * @param mapObject
+     * @param appObject
+     * @param x
+     * @param y
+     */
+    public YellowEnemy(Map mapObject, PApplet appObject, int x, int y) {
+<span class="fc" id="L28">        super(mapObject,appObject, x, y);</span>
+<span class="fc" id="L29">        this.appObject = appObject;</span>
+        // loadYellowEnemyImages();
+<span class="fc" id="L31">        super.moveDownSprites = this.moveDownSprites;</span>
+<span class="fc" id="L32">        super.moveUpSprites = this.moveUpSprites;</span>
+<span class="fc" id="L33">        super.moveRightSprites=this.moveRightSprites;</span>
+<span class="fc" id="L34">        super.moveLeftSprites = this.moveLeftSprites;</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * A method to load the sprites of the Yellow Enemy
+     */
+    public void loadYellowEnemyImages() {
+
+<span class="fc" id="L42">        moveLeftSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_left1.png&quot;));</span>
+<span class="fc" id="L43">        moveLeftSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_left2.png&quot;));</span>
+<span class="fc" id="L44">        moveLeftSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_left3.png&quot;));</span>
+<span class="fc" id="L45">        moveLeftSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_left4.png&quot;));</span>
+
+<span class="fc" id="L47">        moveRightSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_right1.png&quot;));</span>
+<span class="fc" id="L48">        moveRightSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_right2.png&quot;));</span>
+<span class="fc" id="L49">        moveRightSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_right3.png&quot;));</span>
+<span class="fc" id="L50">        moveRightSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_right4.png&quot;));</span>
+
+<span class="fc" id="L52">        moveUpSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_up1.png&quot;));</span>
+<span class="fc" id="L53">        moveUpSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_up2.png&quot;));</span>
+<span class="fc" id="L54">        moveUpSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_up3.png&quot;));</span>
+<span class="fc" id="L55">        moveUpSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_up4.png&quot;));</span>
+
+<span class="fc" id="L57">        moveDownSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_down1.png&quot;));</span>
+<span class="fc" id="L58">        moveDownSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_down2.png&quot;));</span>
+<span class="fc" id="L59">        moveDownSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_down3.png&quot;));</span>
+<span class="fc" id="L60">        moveDownSprites.add(appObject.loadImage(&quot;/src/main/resources/yellow_enemy/yellow_down4.png&quot;));</span>
+
+<span class="fc" id="L62">    }</span>
+    /**
+     * A method to move the Yellow Enemy in clockwise direction
+     */
+    public void step() {
+<span class="fc bfc" id="L67" title="All 4 branches covered.">        if (!this.collidesWithWall(&quot;Left&quot;) &amp;&amp; this.direction.equals(&quot;Left&quot;)) {</span>
+<span class="fc" id="L68">            this.sub_x_direction();</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">        } else if (!this.collidesWithWall(&quot;Right&quot;) &amp;&amp; this.direction.equals(&quot;Right&quot;)) {</span>
+<span class="fc" id="L70">            this.add_x_direction();</span>
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">        } else if (!this.collidesWithWall(&quot;Down&quot;) &amp;&amp; this.direction.equals(&quot;Down&quot;)) {</span>
+<span class="fc" id="L72">            this.add_y_direction();</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">        } else if (!this.collidesWithWall(&quot;Up&quot;) &amp;&amp; this.direction.equals(&quot;Up&quot;)) {</span>
+<span class="fc" id="L74">            this.sub_y_direction();</span>
+        } else {
+<span class="fc" id="L76">            this.direction = this.clockwiseDirection(this.direction);</span>
+<span class="fc" id="L77">            this.move(this.direction);</span>
+        }
+<span class="fc" id="L79">    }</span>
+    /**
+     * Given the previous direction of the Yellow Enemy,
+     * a new clockwise direction will be returned 
+     * which is free from any hindrances
+     * @param direction
+     * @return newDirection
+     */
+    public String clockwiseDirection(String direction) {
+<span class="fc" id="L88">        int i=0;</span>
+        String newDirection;
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            for (int c=0;c&lt;4;c++)</span>
+            {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">                if (direction.equals(directions[c]))</span>
+                {
+<span class="fc" id="L95">                    i=c;</span>
+                }
+            }
+
+        while (true)
+        {
+<span class="fc" id="L101">            newDirection = directions[(i+1)%4];</span>
+<span class="fc" id="L102">            i++;</span>
+
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (!collidesWithWall(newDirection))</span>
+            {
+<span class="fc" id="L106">                return newDirection;</span>
+            }
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
